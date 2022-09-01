@@ -1,6 +1,8 @@
 export class Clock {
   private canvas: HTMLCanvasElement
   private ctx: CanvasRenderingContext2D
+  height: number
+  width: number
   hourDivisions: number
   color: string
   radius: number
@@ -11,9 +13,11 @@ export class Clock {
   constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
     this.canvas = canvas
     this.ctx = ctx
-    this.hourDivisions = 4
+    this.height = this.canvas.height
+    this.width = this.canvas.width
+    this.hourDivisions = 12
     this.color = "green"
-    this.radius = 400
+    this.radius = Math.min(this.height, this.width) / 2 - 70
     this.hourHandLength = this.radius / 2
     this.minuteHandLength = this.radius / 1.5
     this.secondHandLength = this.radius / 1.2
@@ -31,9 +35,18 @@ export class Clock {
     this.createHourHand()
     this.createMinuteHand()
     this.createSecondHand()
-    this.createCircle(0, 0, 10)
+    this.createCircle(0, 0, this.radius / 30, 5)
 
     this.ctx.restore()
+  }
+
+  resize() {
+    this.height = this.canvas.height
+    this.width = this.canvas.width
+    this.radius = Math.min(this.height, this.width) / 2 - 70
+    this.hourHandLength = this.radius / 2
+    this.minuteHandLength = this.radius / 1.5
+    this.secondHandLength = this.radius / 1.2
   }
 
   private createCircle(x: number, y: number, radius: number, lineWidth: number = 10) {
